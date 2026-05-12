@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ตัวบทกฎหมายอาญา</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Thai:wght@300;400;500;600;700&family=Sarabun:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.47.0/tabler-icons.min.css">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #faf9f7;
+  --surface: #ffffff;
+  --surface2: #f5f3ef;
+  --border: #e8e4dd;
+  --border2: #d8d3ca;
+
+  --ink: #1c1917;
+  --ink2: #44403c;
+  --ink3: #78716c;
+  --ink4: #a8a29e;
+
+  --gold: #92692a;
+  --gold-light: #f7f0e4;
+  --gold-mid: #d4a853;
+
+  /* หมวดสี */
+  --c-q2: #1d4ed8;
+  --c-q3: #15803d;
+  --c-q4: #7c2d12;
+
+  /* Category colors */
+  --col-help:   #64748b;
+  --col-bribe:  #dc2626;
+  --col-false:  #2563eb;
+  --col-gang:   #be185d;
+  --col-fire:   #ea580c;
+  --col-note:   #9333ea;
+  --col-coin:   #0d9488;
+  --col-sex:    #9f1239;
+  --col-doc:    #065f46;
+  --col-def:    #78716c;
+  --col-join:   #1e293b;
+
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow-card: 0 1px 3px rgba(0,0,0,.06), 0 4px 16px rgba(0,0,0,.04);
+  --shadow-hover: 0 4px 24px rgba(0,0,0,.10);
+  --transition: all .2s cubic-bezier(.4,0,.2,1);
+}
+
+body {
+  font-family: 'Sarabun', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Layout ─────────────────────────── */
+.page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 4rem;
+}
+
+/* ── Header ─────────────────────────── */
+.hero {
+  margin-bottom: 2rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+.hero-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: .5rem;
+}
+.hero-title {
+  font-family: 'Noto Serif Thai', serif;
+  font-size: clamp(22px, 4vw, 32px);
+  font-weight: 700;
+  color: var(--ink);
+  letter-spacing: -.02em;
+  line-height: 1.2;
+  margin-bottom: .4rem;
+}
+.hero-meta {
+  font-size: 13px;
+  color: var(--ink3);
+  display: flex;
+  gap: 1.2rem;
+  flex-wrap: wrap;
+}
+.hero-meta span { display: flex; align-items: center; gap: 4px; }
+
+/* ── Controls ─────────────────────────── */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  margin-bottom: 1.5rem;
+}
+.controls-row {
+  display: flex;
+  gap: .75rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+/* Search */
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+}
+.search-icon {
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--ink4);
+  font-size: 16px;
+  pointer-events: none;
+}
+.search-input {
+  width: 100%;
+  padding: 9px 14px 9px 38px;
+  border: 1.5px solid var(--border2);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13.5px;
+  color: var(--ink);
+  transition: var(--transition);
+}
+.search-input:focus {
+  outline: none;
+  border-color: var(--gold-mid);
+  box-shadow: 0 0 0 3px rgba(212,168,83,.12);
+}
+.search-input::placeholder { color: var(--ink4); }
+
+/* View toggle */
+.view-toggle {
+  display: flex;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 3px;
+  gap: 2px;
+  flex-shrink: 0;
+}
+.vbtn {
+  padding: 5px 11px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--ink4);
+  cursor: pointer;
+  font-size: 14px;
+  transition: var(--transition);
+  display: flex;
+  align-items: center;
+}
+.vbtn.active {
+  background: var(--surface);
+  color: var(--ink2);
+  box-shadow: 0 1px 4px rgba(0,0,0,.08);
+}
+
+/* Top tabs */
+.top-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.top-tab {
+  padding: 7px 16px;
+  border-radius: 50px;
+  border: 1.5px solid var(--border2);
+  background: transparent;
+  color: var(--ink3);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 13px;
+  cursor: pointer;
+  transition: var(--transition);
+  line-height: 1.3;
+  font-weight: 400;
+}
+.top-tab:hover:not(.active) {
+  background: var(--surface2);
+  color: var(--ink2);
+  border-color: var(--border2);
+}
+.top-tab.active {
+  color: #fff;
+  border-color: transparent;
+  font-weight: 600;
+}
+.top-tab[data-id="all"].active  { background: var(--ink); }
+.top-tab[data-id="q2"].active   { background: var(--c-q2); }
+.top-tab[data-id="q3"].active   { background: var(--c-q3); }
+.top-tab[data-id="q4"].active   { background: var(--c-q4); }
+
+.tab-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  font-size: 10.5px;
+  font-weight: 600;
+  margin-left: 4px;
+  background: rgba(255,255,255,.22);
+  color: inherit;
+}
+.top-tab:not(.active) .tab-count {
+  background: var(--surface2);
+  color: var(--ink4);
+}
+
+/* Sub tabs */
+.sub-tabs {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.sub-tab {
+  padding: 4px 12px;
+  border-radius: 50px;
+  border: 1.5px solid var(--border);
+  background: transparent;
+  color: var(--ink3);
+  font-family: 'Sarabun', sans-serif;
+  font-size: 12px;
+  cursor: pointer;
+  transition: var(--transition);
+}
+.sub-tab:hover:not(.active) { background: var(--surface2); color: var(--ink2); }
+.sub-tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+/* Toolbar */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+.stat-text { font-size: 12px; color: var(--ink4); }
+.stat-text b { color: var(--ink3); font-weight: 600; }
+
+/* ── CARD GRID ─────────────────────────── */
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-card);
+  position: relative;
+}
+.card:hover {
+  border-color: var(--border2);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+.card.expanded {
+  border-color: var(--gold-mid);
+  box-shadow: 0 0 0 3px rgba(212,168,83,.12), var(--shadow-hover);
+}
+
+.card-top-bar { height: 4px; width: 100%; }
+.card-body { padding: 14px 16px 12px; }
+
+.card-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
+.matra {
+  font-family: 'Noto Serif Thai', serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink);
+  white-space: nowrap;
+}
+.cat-pill {
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 9px;
+  border-radius: 50px;
+  white-space: nowrap;
+  letter-spacing: .01em;
+}
+.card-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  line-height: 1.45;
+  margin-bottom: 10px;
+}
+.sep { height: 1px; background: var(--border); margin-bottom: 10px; }
+.short-lbl {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink4);
+  margin-bottom: 5px;
+}
+.card-short { font-size: 12.5px; color: var(--ink3); line-height: 1.75; }
+.card-full  { font-size: 12.5px; color: var(--ink2); line-height: 1.8; display: none; }
+.card.expanded .card-short { display: none; }
+.card.expanded .card-full  { display: block; }
+
+.card-footer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.expand-hint {
+  font-size: 10.5px;
+  color: var(--ink4);
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  transition: color .15s;
+}
+.card:hover .expand-hint { color: var(--ink3); }
+.expand-hint-close { display: none; }
+.card.expanded .expand-hint-open  { display: none; }
+.card.expanded .expand-hint-close { display: flex; }
+
+/* ── LIST VIEW ─────────────────────────── */
+.list-item {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-card);
+  margin-bottom: 8px;
+}
+.list-item:hover {
+  border-color: var(--border2);
+  box-shadow: var(--shadow-hover);
+}
+.list-item.expanded { border-color: var(--gold-mid); }
+
+.list-inner { display: flex; }
+.list-bar { width: 4px; flex-shrink: 0; }
+.list-body { flex: 1; padding: 12px 16px; }
+.list-top { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+.list-matra {
+  font-family: 'Noto Serif Thai', serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.list-name { font-size: 13.5px; font-weight: 600; color: var(--ink); margin-bottom: 5px; }
+.list-short { font-size: 12.5px; color: var(--ink3); line-height: 1.65; }
+.list-full  {
+  font-size: 12.5px;
+  color: var(--ink2);
+  line-height: 1.8;
+  display: none;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid var(--border);
+}
+.list-item.expanded .list-short { display: none; }
+.list-item.expanded .list-full  { display: block; }
+
+/* ── Rich content inside full ─────────── */
+.full-p { margin-bottom: 8px; }
+.full-p b { font-weight: 600; color: var(--ink); }
+
+.penalty-box {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  background: var(--gold-light);
+  border: 1px solid #e8d5a8;
+  border-left: 3px solid var(--gold-mid);
+  padding: 8px 12px;
+  border-radius: 0 8px 8px 0;
+  margin: 8px 0;
+  font-size: 12px;
+  color: #5a3e0a;
+  line-height: 1.7;
+}
+.penalty-box::before {
+  content: '⚖️';
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.note-p {
+  font-size: 11.5px;
+  color: var(--ink3);
+  font-style: italic;
+  margin-bottom: 4px;
+  padding-left: 2px;
+  line-height: 1.65;
+}
+
+/* ── Category colors ─────────────────── */
+/* Top bars & list bars */
+.bar-ชวยเหลอผกระทาผด, .list-bar-ชวยเหลอผกระทาผด { background: var(--col-help); }
+.bar-สนบน,           .list-bar-สนบน            { background: var(--col-bribe); }
+.bar-แจงความเทจ,      .list-bar-แจงความเทจ       { background: var(--col-false); }
+.bar-องยซองโจร,       .list-bar-องยซองโจร        { background: var(--col-gang); }
+.bar-เพลงไหม,         .list-bar-เพลงไหม          { background: var(--col-fire); }
+.bar-ปลอมเงนตราธนบตร, .list-bar-ปลอมเงนตราธนบตร  { background: var(--col-note); }
+.bar-บตรอเลกทรอนกส,   .list-bar-บตรอเลกทรอนกส    { background: var(--col-coin); }
+.bar-ปลอมเงนตราเหรยญ, .list-bar-ปลอมเงนตราเหรยญ  { background: var(--col-coin); }
+.bar-ความผดเกยวกบเพศ,  .list-bar-ความผดเกยวกบเพศ   { background: var(--col-sex); }
+.bar-เอกสาร,          .list-bar-เอกสาร           { background: var(--col-doc); }
+.bar-นยาม,            .list-bar-นยาม             { background: var(--col-def); }
+.bar-ตวการรวม,         .list-bar-ตวการรวม          { background: var(--col-join); }
+
+/* Pills */
+.pill-ชวยเหลอผกระทาผด { background: #f1f5f9; color: var(--col-help); }
+.pill-สนบน            { background: #fef2f2; color: var(--col-bribe); }
+.pill-แจงความเทจ       { background: #eff6ff; color: var(--col-false); }
+.pill-องยซองโจร        { background: #fdf2f8; color: var(--col-gang); }
+.pill-เพลงไหม          { background: #fff7ed; color: var(--col-fire); }
+.pill-ปลอมเงนตราธนบตร  { background: #faf5ff; color: var(--col-note); }
+.pill-บตรอเลกทรอนกส    { background: #f0fdfa; color: var(--col-coin); }
+.pill-ปลอมเงนตราเหรยญ  { background: #f0fdfa; color: var(--col-coin); }
+.pill-ความผดเกยวกบเพศ   { background: #fff1f2; color: var(--col-sex); }
+.pill-เอกสาร           { background: #f0fdf4; color: var(--col-doc); }
+.pill-นยาม             { background: #f5f5f4; color: var(--col-def); }
+.pill-ตวการรวม          { background: #f1f5f9; color: var(--col-join); }
+
+/* ── Empty state ─────────────────────── */
+.empty {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--ink4);
+}
+.empty i { font-size: 36px; display: block; margin-bottom: 12px; color: var(--border2); }
+.empty p { font-size: 14px; }
+
+/* ── Responsive ─────────────────────── */
+@media (max-width: 600px) {
+  .page { padding: 1.25rem 1rem 3rem; }
+  .hero-title { font-size: 22px; }
+  .top-tab { font-size: 12px; padding: 6px 12px; }
+  .cards-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-eyebrow">ประมวลกฎหมายอาญา</div>
+    <h1 class="hero-title">ตัวบทกฎหมายอาญา</h1>
+    <div class="hero-meta">
+      <span><i class="ti ti-files"></i> 29 มาตรา</span>
+      <span><i class="ti ti-category"></i> จัดตามข้อสอบ</span>
+      <span><i class="ti ti-hand-click"></i> แตะบัตรเพื่อดูตัวบทเต็ม</span>
+    </div>
+  </header>
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="controls-row">
+      <div class="search-wrap">
+        <i class="ti ti-search search-icon"></i>
+        <input class="search-input" type="search" placeholder="ค้นหา มาตรา ชื่อความผิด หรือหมวดหมู่..." oninput="onSearch(this.value)">
+      </div>
+      <div class="view-toggle">
+        <button class="vbtn active" id="btn-card" onclick="setView('card')" title="มุมมองบัตร"><i class="ti ti-layout-grid"></i></button>
+        <button class="vbtn" id="btn-list" onclick="setView('list')" title="มุมมองรายการ"><i class="ti ti-list"></i></button>
+      </div>
+    </div>
+    <div class="top-tabs" id="top-tabs"></div>
+    <div class="sub-tabs" id="sub-tabs"></div>
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <div class="stat-text" id="stat-text"></div>
+  </div>
+
+  <!-- Content -->
+  <div id="cards-area"></div>
+
+</div>
+
+<script>
+const GROUPS = [
+  { id: "all", label: "ทั้งหมด" },
+  { id: "q2",  label: "ข้อ 2 · เจ้าพนักงาน & ยุติธรรม" },
+  { id: "q3",  label: "ข้อ 3 · ความสงบสุข & เพลิงไหม้" },
+  { id: "q4",  label: "ข้อ 4 · บัตร / เงินตรา / เพศ / เอกสาร" },
+];
+
+const CATS = {
+  "ช่วยเหลือผู้กระทำผิด": { g: "q2" },
+  "สินบน":                 { g: "q2" },
+  "แจ้งความเท็จ":          { g: "q2" },
+  "อั้งยี่/ซ่องโจร":        { g: "q3" },
+  "ปลอมเงินตรา (ธนบัตร)":   { g: "q3" },
+  "เพลิงไหม้":              { g: "q3" },
+  "บัตรอิเล็กทรอนิกส์":     { g: "q4" },
+  "ปลอมเงินตรา (เหรียญ)":   { g: "q4" },
+  "ความผิดเกี่ยวกับเพศ":    { g: "q4" },
+  "เอกสาร":                { g: "q4" },
+  "นิยาม":                 { g: "q4" },
+  "ตัวการร่วม":             { g: "q4" },
+};
+
+const DATA = [
+  // ── ข้อ 2
+  { m:"ม.189", cat:"ช่วยเหลือผู้กระทำผิด",
+    name:"ช่วยผู้กระทำผิดพ้นโทษ",
+    short:"ช่วยเหลือผู้กระทำผิด (อันมิใช่ลหุโทษ) หรือผู้ต้องหา ไม่ให้ต้องโทษ โดยให้พำนัก ซ่อนเร้น หรือช่วยหลบหนี",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดช่วยผู้อื่นซึ่งเป็นผู้กระทำความผิด หรือเป็นผู้ต้องหาว่ากระทำความผิด อันมิใช่ความผิดลหุโทษ เพื่อไม่ให้ต้องโทษ โดยให้พำนักแก่ผู้นั้น โดยซ่อนเร้น หรือโดยช่วยผู้นั้นด้วยประการใดเพื่อไม่ให้ถูกจับกุม ผู้นั้นกระทำความผิด</p>
+<div class="penalty-box">จำคุกไม่เกิน 2 ปี หรือปรับไม่เกิน 40,000 บาท หรือทั้งจำทั้งปรับ</div>
+<p class="note-p">⚠️ ข้อยกเว้น: ไม่มีความผิดหากช่วยบุพการี ผู้สืบสันดาน สามี หรือภริยาของตนเอง</p>` },
+
+  { m:"ม.192", cat:"ช่วยเหลือผู้กระทำผิด",
+    name:"ช่วยเหลือผู้หลบหนีจากการคุมขัง",
+    short:"ช่วยเหลือผู้ที่ถูกคุมขังตามกฎหมายให้หลบหนีหรือพ้นจากการคุมขัง",
+    full:`<p class="full-p"><b>ตัวบท:</b> บัญญัติให้ผู้ที่ช่วยเหลือผู้ซึ่งถูกคุมขังตามกฎหมายให้หลบหนีหรือพ้นจากการควบคุมนั้นต้องรับโทษ</p>
+<div class="penalty-box">จำคุกไม่เกิน 3 ปี หรือปรับไม่เกิน 60,000 บาท หรือทั้งจำทั้งปรับ</div>
+<p class="note-p">📌 ต่างจาก ม.189 ตรงที่เน้น "ผู้ถูกคุมขัง" ไม่ใช่แค่ผู้กระทำผิดหรือผู้ต้องหาทั่วไป</p>` },
+
+  { m:"ม.205", cat:"ช่วยเหลือผู้กระทำผิด",
+    name:"เจ้าพนักงานประมาทให้ผู้ต้องขังหลุดพ้น",
+    short:"เจ้าพนักงานผู้มีหน้าที่ควบคุมดูแลผู้ต้องขัง กระทำโดยประมาท เป็นเหตุให้ผู้ต้องขังหลุดพ้นจากการคุมขัง",
+    full:`<p class="full-p"><b>ตัวบท:</b> เจ้าพนักงานผู้มีหน้าที่ควบคุมดูแลผู้ต้องขัง กระทำการโดยประมาทเป็นเหตุให้ผู้ต้องขังหลุดพ้นจากการคุมขังไป</p>
+<div class="penalty-box">จำคุกไม่เกิน 1 ปี หรือปรับไม่เกิน 20,000 บาท หรือทั้งจำทั้งปรับ</div>
+<p class="note-p">📌 ใช้ประกอบ ม.189 เพื่อพิจารณาสถานะ "ผู้กระทำความผิด" ของบุคคลที่ถูกช่วยเหลือ</p>` },
+
+  { m:"ม.143", cat:"สินบน",
+    name:"คนกลางเรียกรับสินบน",
+    short:"เรียก รับ หรือยอมรับทรัพย์สิน/ประโยชน์ เพื่อจูงใจเจ้าพนักงานโดยทุจริตหรืออิทธิพล",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดเรียก รับ หรือยอมจะรับทรัพย์สิน หรือประโยชน์อื่นใดสำหรับตนเองหรือผู้อื่น เป็นการตอบแทนในการที่จะจูงใจเจ้าพนักงาน... โดยวิธีอันทุจริตหรือผิดกฎหมาย หรือโดยอิทธิพลของตน ให้กระทำการหรือไม่กระทำการในหน้าที่อันเป็นคุณหรือเป็นโทษแก่บุคคลใด</p>
+<div class="penalty-box">จำคุก 1–10 ปี และปรับ 20,000–200,000 บาท</div>
+<p class="note-p">📌 ผู้กระทำเป็น "คนกลาง" ไม่ใช่เจ้าพนักงาน — ต่างจาก ม.149</p>` },
+
+  { m:"ม.149", cat:"สินบน",
+    name:"เจ้าพนักงานเรียกรับสินบน",
+    short:"เจ้าพนักงานเรียก รับ หรือยอมรับทรัพย์สิน/ประโยชน์ เพื่อกระทำการหรือไม่กระทำการในตำแหน่ง",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดเป็นเจ้าพนักงาน... เรียก รับ หรือยอมจะรับทรัพย์สิน หรือประโยชน์อื่นใด สำหรับตนเองหรือผู้อื่นโดยมิชอบ เพื่อกระทำการหรือไม่กระทำการอย่างใดในตำแหน่ง ไม่ว่าการนั้นจะชอบหรือมิชอบด้วยหน้าที่</p>
+<div class="penalty-box">จำคุก 5–20 ปี หรือตลอดชีวิต และปรับ 100,000–400,000 บาท</div>
+<p class="note-p">📌 ต้องมีสถานะ "เจ้าพนักงาน" จริง ต่างจาก ม.143 ที่เป็นคนกลางทั่วไป</p>` },
+
+  { m:"ม.137", cat:"แจ้งความเท็จ",
+    name:"แจ้งข้อความเท็จแก่เจ้าพนักงาน",
+    short:"แจ้งข้อความอันเป็นเท็จแก่เจ้าพนักงาน ซึ่งอาจทำให้ผู้อื่นหรือประชาชนเสียหาย",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดแจ้งข้อความอันเป็นเท็จแก่เจ้าพนักงาน ซึ่งอาจทำให้ผู้อื่นหรือประชาชนเสียหาย ผู้นั้นกระทำความผิด</p>
+<div class="penalty-box">จำคุกไม่เกิน 6 เดือน หรือปรับไม่เกิน 10,000 บาท หรือทั้งจำทั้งปรับ</div>
+<p class="note-p">📌 อยู่ในชั้นเจ้าพนักงาน ต่างจากฟ้องเท็จ (ม.175) ที่อยู่ในชั้นศาล</p>` },
+
+  { m:"ม.300", cat:"แจ้งความเท็จ",
+    name:"ประมาทเป็นเหตุให้ผู้อื่นรับอันตรายสาหัส",
+    short:"กระทำโดยประมาทเป็นเหตุให้ผู้อื่นได้รับอันตรายสาหัส",
+    full:`<p class="full-p"><b>ตัวบท:</b> กระทำโดยประมาทเป็นเหตุให้ผู้อื่นได้รับอันตรายสาหัส</p>
+<div class="penalty-box">จำคุกไม่เกิน 3 ปี หรือปรับไม่เกิน 60,000 บาท หรือทั้งจำทั้งปรับ</div>
+<p class="note-p">📌 มักระบุในโจทย์เพื่อเป็นฐานความผิดเดิม ประกอบ ม.189</p>` },
+
+  // ── ข้อ 3
+  { m:"ม.209", cat:"อั้งยี่/ซ่องโจร",
+    name:"เป็นอั้งยี่",
+    short:"เป็นสมาชิกคณะบุคคลที่ปกปิดวิธีดำเนินการ มีความมุ่งหมายเพื่อการอันมิชอบด้วยกฎหมาย",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดเป็นสมาชิกของคณะบุคคลซึ่งปกปิดวิธีดำเนินการ และมีความมุ่งหมายเพื่อการอันมิชอบด้วยกฎหมาย ผู้นั้นกระทำความผิดฐานเป็นอั้งยี่ ถ้าผู้กระทำความผิดเป็นหัวหน้า ต้องระวางโทษหนักขึ้น</p>
+<div class="penalty-box">สมาชิก: จำคุกไม่เกิน 7 ปี และปรับไม่เกิน 140,000 บาท<br>หัวหน้า: จำคุก 1–10 ปี และปรับ 20,000–200,000 บาท</div>` },
+
+  { m:"ม.210", cat:"อั้งยี่/ซ่องโจร",
+    name:"เป็นซ่องโจร",
+    short:"สมคบกันตั้งแต่ 5 คนขึ้นไป เพื่อกระทำความผิดที่มีโทษจำคุกอย่างสูงตั้งแต่ 1 ปีขึ้นไป",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดสมคบกันตั้งแต่ 5 คนขึ้นไป เพื่อกระทำความผิดอย่างหนึ่งอย่างใดตามที่บัญญัติไว้ในภาค 2 นี้ และความผิดนั้นมีกำหนดโทษจำคุกอย่างสูงตั้งแต่ 1 ปีขึ้นไป ผู้นั้นกระทำความผิดฐานเป็นซ่องโจร</p>
+<div class="penalty-box">ทั่วไป: จำคุกไม่เกิน 5 ปี และปรับไม่เกิน 100,000 บาท<br>กรณีโทษประหาร/ตลอดชีวิต/≥10 ปี: จำคุก 1–7 ปี และปรับ 20,000–140,000 บาท</div>
+<p class="note-p">📌 องค์ประกอบ: (1) สมคบ ≥5 คน (2) เพื่อทำผิดในภาค 2 (3) โทษจำคุก ≥1 ปี</p>` },
+
+  { m:"ม.212", cat:"อั้งยี่/ซ่องโจร",
+    name:"สนับสนุนอั้งยี่/ซ่องโจร",
+    short:"จัดหาที่ประชุม ที่พำนัก หรือช่วยให้สะดวกแก่การชุมนุมของคณะอั้งยี่หรือซ่องโจร",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดจัดหาที่ประชุมหรือที่พำนักให้แก่คณะบุคคลตาม ม.209 หรือ ม.210 เข้าร่วมประชุมแต่ปฏิเสธไม่ยอมบอกความจริง หรือรู้ว่ามีการประชุมแล้วช่วยให้สะดวกแก่การชุมนุมนั้น ผู้นั้นต้องระวางโทษเช่นเดียวกับผู้กระทำความผิด</p>
+<div class="penalty-box">โทษเช่นเดียวกับสมาชิกอั้งยี่/ซ่องโจร (ตาม ม.209 หรือ ม.210)</div>
+<p class="note-p">📌 ไม่จำเป็นต้องเป็นสมาชิก เพียงให้ความสะดวกก็ผิดแล้ว</p>` },
+
+  { m:"ม.215", cat:"อั้งยี่/ซ่องโจร",
+    name:"มั่วสุมก่อความวุ่นวาย",
+    short:"มั่วสุมกันตั้งแต่ 10 คนขึ้นไป ใช้กำลังประทุษร้ายหรือขู่เข็ญ หรือกระทำการใดให้เกิดความวุ่นวายในบ้านเมือง",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดมั่วสุมกันตั้งแต่ 10 คนขึ้นไป ใช้กำลังประทุษร้าย ขู่เข็ญว่าจะใช้กำลังประทุษร้าย หรือกระทำการอย่างหนึ่งอย่างใดให้เกิดการวุ่นวายขึ้นในบ้านเมือง ผู้นั้นกระทำความผิด</p>
+<div class="penalty-box">ทั่วไป: จำคุกไม่เกิน 6 เดือน หรือปรับไม่เกิน 10,000 บาท<br>มีอาวุธ: จำคุกไม่เกิน 2 ปี และปรับไม่เกิน 40,000 บาท<br>หัวหน้า: จำคุก 6 เดือน–5 ปี และปรับ 10,000–100,000 บาท</div>` },
+
+  { m:"ม.217", cat:"เพลิงไหม้",
+    name:"วางเพลิงเผาทรัพย์ผู้อื่น",
+    short:"วางเพลิงเผาทรัพย์ของผู้อื่น",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดวางเพลิงเผาทรัพย์ของผู้อื่น ผู้นั้นกระทำความผิด</p>
+<div class="penalty-box">จำคุก 6 เดือน–7 ปี และปรับ 10,000–140,000 บาท</div>
+<p class="note-p">📌 ต้องเป็นทรัพย์ของ "ผู้อื่น" — ต่างจาก ม.220 ที่เป็นทรัพย์ตนเอง</p>` },
+
+  { m:"ม.220", cat:"เพลิงไหม้",
+    name:"ทำให้เกิดเพลิงไหม้แก่ทรัพย์ตนเอง",
+    short:"ทำให้เกิดเพลิงไหม้แก่วัตถุใดๆ แม้เป็นของตนเอง จนน่าจะเป็นอันตรายแก่บุคคลอื่นหรือทรัพย์ผู้อื่น",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดกระทำให้เกิดเพลิงไหม้แก่วัตถุใดๆ แม้เป็นของตนเอง จนน่าจะเป็นอันตรายแก่บุคคลอื่นหรือทรัพย์ของผู้อื่น ผู้นั้นกระทำความผิด</p>
+<div class="penalty-box">จำคุกไม่เกิน 7 ปี และปรับไม่เกิน 140,000 บาท</div>
+<p class="note-p">📌 คำสำคัญ: แม้ "ของตนเอง" + "น่าจะเป็นอันตรายต่อผู้อื่น"</p>` },
+
+  { m:"ม.225", cat:"เพลิงไหม้",
+    name:"ประมาทเป็นเหตุให้เกิดเพลิงไหม้",
+    short:"กระทำให้เกิดเพลิงไหม้โดยประมาท เป็นเหตุให้ทรัพย์ผู้อื่นเสียหาย หรือน่าจะเป็นอันตรายแก่ชีวิตบุคคลอื่น",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดกระทำให้เกิดเพลิงไหม้โดยประมาท และเป็นเหตุให้ทรัพย์ของผู้อื่นเสียหาย หรือการกระทำนั้นน่าจะเป็นอันตรายแก่ชีวิตของบุคคลอื่น ผู้นั้นกระทำความผิด</p>
+<div class="penalty-box">จำคุกไม่เกิน 7 ปี และปรับไม่เกิน 140,000 บาท</div>
+<p class="note-p">📌 ต่างจาก ม.217 และ ม.220 ที่เป็น "เจตนา" — ม.225 ใช้ "ประมาท"</p>` },
+
+  { m:"ม.240", cat:"ปลอมเงินตรา (ธนบัตร)",
+    name:"ปลอมเงินตรา",
+    short:"ทำปลอมขึ้นซึ่งเงินตรา ไม่ว่าจะเป็นเหรียญกษาปณ์ ธนบัตร หรือสิ่งอื่นใด ซึ่งรัฐบาลออกใช้",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดทำปลอมขึ้นซึ่งเงินตรา ไม่ว่าจะปลอมขึ้นเพื่อให้เป็นเหรียญกษาปณ์ ธนบัตร หรือสิ่งอื่นใด ซึ่งรัฐบาลออกใช้หรือให้อำนาจให้ออกใช้ ผู้นั้นกระทำความผิดฐานปลอมเงินตรา</p>
+<div class="penalty-box">จำคุกตลอดชีวิต หรือจำคุก 10–20 ปี และปรับ 200,000–400,000 บาท</div>
+<p class="note-p">📌 ข้อ 3 เน้นธนบัตร | ข้อ 4 เน้นเหรียญกษาปณ์หรือปลอมซ้อนปลอม</p>` },
+
+  { m:"ม.244", cat:"ปลอมเงินตรา (ธนบัตร)",
+    name:"มีไว้เพื่อใช้ซึ่งเงินตราปลอม",
+    short:"มีไว้เพื่อนำออกใช้ซึ่งสิ่งใดๆ อันตนได้มาโดยรู้ว่าเป็นของปลอมตาม ม.240",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดมีไว้เพื่อนำออกใช้ซึ่งสิ่งใดๆ อันตนได้มาโดยรู้ว่าเป็นของปลอมตามมาตรา 240</p>
+<div class="penalty-box">จำคุก 1–15 ปี และปรับ 20,000–300,000 บาท</div>
+<p class="note-p">📌 ไม่ต้องเป็นผู้ปลอมเอง เพียงรู้และมีไว้เพื่อใช้ก็ผิดแล้ว</p>` },
+
+  // ── ข้อ 4
+  { m:"ม.1(14)(ค)", cat:"บัตรอิเล็กทรอนิกส์",
+    name:"นิยาม 'บัตรอิเล็กทรอนิกส์'",
+    short:"สิ่งอื่นใดที่ใช้ประกอบกับข้อมูลอิเล็กทรอนิกส์เพื่อแสดงความสัมพันธ์ระหว่างบุคคลกับข้อมูล เพื่อระบุตัวตน (เช่น ข้อมูลใบหน้า หรือรหัส OTP)",
+    full:`<p class="full-p"><b>ตัวบท:</b> นิยามบัตรอิเล็กทรอนิกส์ หมายความรวมถึงสิ่งอื่นใดที่ใช้ประกอบกับข้อมูลอิเล็กทรอนิกส์เพื่อแสดงความสัมพันธ์ระหว่างบุคคลกับข้อมูลอิเล็กทรอนิกส์ โดยมีวัตถุประสงค์เพื่อระบุตัวบุคคลผู้เป็นเจ้าของ (เช่น ข้อมูลใบหน้าหรือรหัส OTP)</p>
+<p class="note-p">📌 ครอบคลุมข้อมูลชีวภาพสมัยใหม่ที่ใช้แทนบัตรกายภาพ</p>` },
+
+  { m:"ม.269/5", cat:"บัตรอิเล็กทรอนิกส์",
+    name:"ใช้บัตรอิเล็กทรอนิกส์ผู้อื่นโดยมิชอบ",
+    short:"ใช้บัตรอิเล็กทรอนิกส์ของผู้อื่นโดยมิชอบ ในประการที่น่าจะเกิดความเสียหายแก่ผู้อื่นหรือประชาชน",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดใช้บัตรอิเล็กทรอนิกส์ของผู้อื่นโดยมิชอบ ในประการที่น่าจะเกิดความเสียหายแก่ผู้อื่นหรือประชาชน</p>
+<div class="penalty-box">จำคุกไม่เกิน 5 ปี หรือปรับไม่เกิน 100,000 บาท หรือทั้งจำทั้งปรับ</div>` },
+
+  { m:"ม.269/7", cat:"บัตรอิเล็กทรอนิกส์",
+    name:"บทฉกรรจ์บัตรอิเล็กทรอนิกส์",
+    short:"กระทำตาม ม.269/5 โดยใช้บัตรที่ออกให้แก่ผู้มีสิทธิ เพื่อชำระค่าสินค้า/บริการ หรือเบิกถอนเงินสด",
+    full:`<p class="full-p"><b>ตัวบท:</b> ถ้าการกระทำดังกล่าวเป็นการกระทำเกี่ยวกับบัตรอิเล็กทรอนิกส์ที่ผู้ออกได้ออกให้แก่ผู้มีสิทธิใช้ เพื่อประโยชน์ในการชำระค่าสินค้า ค่าบริการ หรือหนี้อื่นแทนการชำระด้วยเงินสด หรือเบิกถอนเงินสด ผู้กระทำต้องระวางโทษหนักขึ้น</p>
+<div class="penalty-box">จำคุก 1–5 ปี และปรับ 20,000–100,000 บาท</div>
+<p class="note-p">📌 "บทฉกรรจ์" = โทษหนักกว่า ม.269/5 เพราะก่อความเสียหายทางการเงินจริง</p>` },
+
+  { m:"ม.240", cat:"ปลอมเงินตรา (เหรียญ)",
+    name:"ปลอมเงินตรา (รวมปลอมซ้อนปลอม)",
+    short:"ทำปลอมขึ้นซึ่งเหรียญกษาปณ์หรือธนบัตร รวมถึงทำจากวัสดุที่เป็นของปลอมอยู่แล้ว",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดทำปลอมขึ้นซึ่งเงินตรา ไม่ว่าจะปลอมขึ้นเพื่อให้เป็นเหรียญกษาปณ์ ธนบัตร หรือสิ่งอื่นใด ซึ่งรัฐบาลออกใช้หรือให้อำนาจให้ออกใช้ ผู้นั้นกระทำความผิดฐานปลอมเงินตรา</p>
+<div class="penalty-box">จำคุกตลอดชีวิต หรือจำคุก 10–20 ปี และปรับ 200,000–400,000 บาท</div>
+<p class="note-p">📌 ครอบคลุม "ปลอมซ้อนปลอม" ด้วย เช่น นำเหรียญปลอมมาทำเป็นเหรียญปลอมอีกชนิด</p>` },
+
+  { m:"ม.241", cat:"ปลอมเงินตรา (เหรียญ)",
+    name:"แปลงเงินตรา",
+    short:"แปลงเงินตราที่แท้จริง (เหรียญกษาปณ์ ธนบัตร หรือสิ่งอื่นใดที่รัฐบาลออกใช้) ให้มีมูลค่าสูงขึ้น",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดแปลงเงินตรา ไม่ว่าจะเป็นเหรียญกษาปณ์ ธนบัตร หรือสิ่งอื่นใด ซึ่งรัฐบาลออกใช้หรือให้อำนาจให้ออกใช้ ให้มีมูลค่าสูงขึ้น ผู้นั้นกระทำความผิดฐานแปลงเงินตรา</p>
+<div class="penalty-box">จำคุก 5–15 ปี และปรับ 100,000–300,000 บาท</div>
+<p class="note-p">📌 ต่างจาก ม.240 ตรงที่ใช้เงินตรา "จริง" เป็นวัสดุแล้วดัดแปลง ไม่ได้สร้างใหม่ทั้งหมด</p>` },
+
+  { m:"ม.242", cat:"ปลอมเงินตรา (เหรียญ)",
+    name:"ทำเหรียญกษาปณ์น้ำหนักลด",
+    short:"กระทำให้เหรียญกษาปณ์ซึ่งรัฐบาลออกใช้ มีน้ำหนักลดลงโดยทุจริต",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดกระทำให้เหรียญกษาปณ์ซึ่งรัฐบาลออกใช้หรือให้อำนาจให้ออกใช้มีน้ำหนักลดลง โดยทุจริต ผู้นั้นกระทำความผิด</p>
+<div class="penalty-box">จำคุกไม่เกิน 7 ปี และปรับไม่เกิน 140,000 บาท</div>
+<p class="note-p">📌 ใช้วินิจฉัยว่า "ไม่ผิด" เมื่อเป็นการ "เติมเนื้อ" (เพิ่มน้ำหนัก) ไม่ใช่ลดน้ำหนัก</p>` },
+
+  { m:"ม.244", cat:"ปลอมเงินตรา (เหรียญ)",
+    name:"มีไว้เพื่อใช้ซึ่งเงินตราปลอม/แปลง",
+    short:"มีไว้เพื่อนำออกใช้ซึ่งสิ่งใดๆ ที่ตนได้มาโดยรู้ว่าเป็นของปลอมตาม ม.240",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดมีไว้เพื่อนำออกใช้ซึ่งสิ่งใดๆ อันตนได้มาโดยรู้ว่าเป็นของปลอมตามมาตรา 240</p>
+<div class="penalty-box">จำคุก 1–15 ปี และปรับ 20,000–300,000 บาท</div>` },
+
+  { m:"ม.1(18)", cat:"นิยาม",
+    name:"นิยาม 'กระทำชำเรา'",
+    short:"การกระทำเพื่อสนองความใคร่ โดยใช้อวัยวะเพศล่วงล้ำอวัยวะเพศ ทวารหนัก หรือช่องปากของผู้อื่น",
+    full:`<p class="full-p"><b>ตัวบท:</b> นิยามกระทำชำเรา หมายความว่า การกระทำเพื่อสนองความใคร่ของผู้กระทำ โดยการใช้อวัยวะเพศของผู้กระทำล่วงล้ำอวัยวะเพศ ทวารหนัก หรือช่องปากของผู้อื่น</p>
+<p class="note-p">📌 ต้องใช้ประกอบ ม.276 เสมอ เพื่อพิจารณาว่าพฤติการณ์ใดเป็น "ข่มขืนกระทำชำเรา"</p>` },
+
+  { m:"ม.276", cat:"ความผิดเกี่ยวกับเพศ",
+    name:"ข่มขืนกระทำชำเรา",
+    short:"ข่มขืนกระทำชำเราผู้อื่น โดยขู่เข็ญ ใช้กำลัง ผู้อื่นขัดขืนไม่ได้ หรือทำให้หลงเชื่อว่าเป็นบุคคลอื่น",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดข่มขืนกระทำชำเราผู้อื่นโดยขู่เข็ญด้วยประการใดๆ โดยใช้กำลังประทุษร้าย โดยผู้อื่นนั้นอยู่ในภาวะที่ไม่สามารถขัดขืนได้ หรือโดยทำให้ผู้อื่นนั้นเข้าใจผิดว่าตนเป็นบุคคลอื่น ผู้นั้นกระทำความผิดฐานข่มขืนกระทำชำเรา</p>
+<div class="penalty-box">จำคุก 4–20 ปี<br>บทฉกรรจ์ (ร่วมกัน ≥2 คน, ใช้อาวุธ ฯลฯ): จำคุก 7 ปี–ตลอดชีวิต</div>
+<p class="note-p">📌 ต้องประกอบกับนิยาม ม.1(18) เสมอ</p>` },
+
+  { m:"ม.278", cat:"ความผิดเกี่ยวกับเพศ",
+    name:"กระทำอนาจาร",
+    short:"กระทำอนาจารแก่บุคคลอายุกว่า 15 ปี โดยขู่เข็ญ ใช้กำลัง หรือผู้นั้นขัดขืนไม่ได้",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดกระทำอนาจารแก่บุคคลอายุกว่าสิบห้าปีโดยขู่เข็ญด้วยประการใดๆ โดยใช้กำลังประทุษร้าย โดยบุคคลนั้นอยู่ในภาวะที่ไม่สามารถขัดขืนได้... (และมีบทฉกรรจ์กรณีร่วมกันกระทำความผิดตั้งแต่สองคนขึ้นไปหรือลักษณะโทรม)</p>
+<div class="penalty-box">จำคุกไม่เกิน 10 ปี หรือปรับไม่เกิน 200,000 บาท<br>บทฉกรรจ์ (โทรมหญิง-ชาย): จำคุก 4–20 ปี และปรับ 80,000–400,000 บาท</div>
+<p class="note-p">📌 ต่างจาก ม.276 ตรงที่ไม่ถึงขั้น "กระทำชำเรา" ตามนิยาม ม.1(18)</p>` },
+
+  { m:"ม.83", cat:"ตัวการร่วม",
+    name:"ตัวการร่วม",
+    short:"ผู้ที่กระทำความผิดด้วยกัน 2 คนขึ้นไป ต่างรับโทษเสมือนเป็นผู้กระทำเอง",
+    full:`<p class="full-p"><b>ตัวบท:</b> ในกรณีความผิดใดเกิดขึ้นโดยการกระทำของบุคคลตั้งแต่ 2 คนขึ้นไป ผู้ที่ได้ร่วมกระทำความผิดด้วยกันนั้น เรียกว่าตัวการ และต้องรับโทษเสมือนตนเป็นผู้กระทำเอง</p>
+<p class="note-p">📌 องค์ประกอบ: (1) มีเจตนาร่วม (2) มีส่วนร่วมในการกระทำ — ขาดข้อใดข้อหนึ่งอาจเป็นแค่ผู้สนับสนุน</p>
+<p class="note-p">📌 ใช้ประกอบในหลายข้อสอบ โดยเฉพาะกรณีร่วมกันข่มขืน (ม.276, ม.278)</p>` },
+
+  { m:"ม.1(7)", cat:"เอกสาร",
+    name:"นิยาม 'เอกสาร'",
+    short:"กระดาษหรือวัตถุอื่นใดที่ทำให้ปรากฏความหมายด้วยตัวอักษร ตัวเลข ผัง หรือแผนแบบ อันเป็นหลักฐานแห่งความหมายนั้น",
+    full:`<p class="full-p"><b>ตัวบท:</b> นิยามเอกสาร หมายถึง กระดาษหรือวัตถุอื่นใดซึ่งได้ทำให้ปรากฏความหมายด้วยตัวอักษร ตัวเลข ผัง หรือแผนแบบอย่างอื่น... อันเป็นหลักฐานแห่งความหมายนั้น</p>
+<p class="note-p">📌 คำสำคัญ: "อันเป็นหลักฐานแห่งความหมายนั้น" — สิ่งที่ไม่มีคุณสมบัตินี้ไม่ถือเป็น "เอกสาร"</p>` },
+
+  { m:"ม.264", cat:"เอกสาร",
+    name:"ปลอมเอกสาร",
+    short:"ทำเอกสารปลอมขึ้น หรือเติม ตัดทอน แก้ไขเอกสารที่แท้จริง โดยประการที่น่าจะเกิดความเสียหายแก่ผู้อื่น",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดทำเอกสารปลอมขึ้นทั้งฉบับหรือแต่ส่วนหนึ่งส่วนใด เติมหรือตัดทอนข้อความ หรือแก้ไขด้วยประการใดๆ ในเอกสารที่แท้จริง... โดยประการที่น่าจะเกิดความเสียหายแก่ผู้อื่นหรือประชาชน ถ้าได้กระทำเพื่อให้ผู้หนึ่งผู้ใดหลงเชื่อว่าเป็นเอกสารที่แท้จริง ผู้นั้นกระทำความผิดฐานปลอมเอกสาร</p>
+<div class="penalty-box">จำคุกไม่เกิน 3 ปี และปรับไม่เกิน 60,000 บาท</div>
+<p class="note-p">📌 เอกสาร "เท็จ" = เนื้อหาไม่จริง | เอกสาร "ปลอม" = แหล่งกำเนิดหรือผู้ทำไม่ใช่ผู้ที่ปรากฏ</p>` },
+
+  { m:"ม.269", cat:"เอกสาร",
+    name:"ผู้มีวิชาชีพทำคำรับรองเอกสารเท็จ",
+    short:"ผู้ประกอบวิชาชีพ (แพทย์ กฎหมาย บัญชี หรือวิชาชีพอื่น) ทำคำรับรองเป็นเอกสารอันเป็นเท็จ น่าจะเกิดความเสียหายแก่ผู้อื่น",
+    full:`<p class="full-p"><b>ตัวบท:</b> ผู้ใดในการประกอบการงานในวิชาแพทย์ กฎหมาย บัญชีหรือวิชาชีพอื่นใด ทำคำรับรองเป็นเอกสารอันเป็นเท็จ โดยประการที่น่าจะเกิดความเสียหายแก่ผู้อื่นหรือประชาชน ผู้นั้นกระทำความผิด</p>
+<div class="penalty-box">จำคุกไม่เกิน 2 ปี และปรับไม่เกิน 40,000 บาท</div>
+<p class="note-p">📌 เฉพาะ "ผู้มีวิชาชีพ" เท่านั้น — ต่างจาก ม.264 ที่ใครก็ผิดได้</p>` },
+];
+
+// ── Helpers
+function slug(s){ return s.replace(/[^ก-๙a-zA-Z0-9]/g,""); }
+function barCls(c){ return "bar-" + slug(c); }
+function listBarCls(c){ return "list-bar-" + slug(c); }
+function pillCls(c){ return "pill-" + slug(c); }
+
+let topCat = "all", subCat = "all_sub", view = "card", q = "";
+
+function matchGroup(d){
+  if(topCat === "all") return true;
+  return CATS[d.cat] && CATS[d.cat].g === topCat;
+}
+function getSubCats(){
+  const src = topCat === "all" ? DATA : DATA.filter(d => matchGroup(d));
+  return [...new Set(src.map(d => d.cat))];
+}
+function getFiltered(){
+  return DATA.filter(d => {
+    if(!matchGroup(d)) return false;
+    if(subCat !== "all_sub" && d.cat !== subCat) return false;
+    const lq = q.toLowerCase();
+    if(lq && !d.m.toLowerCase().includes(lq) && !d.name.toLowerCase().includes(lq)
+         && !d.short.toLowerCase().includes(lq) && !d.cat.toLowerCase().includes(lq)) return false;
+    return true;
+  });
+}
+function toggle(prefix, i){
+  const el = document.getElementById(prefix + i);
+  if(el) el.classList.toggle("expanded");
+}
+
+function renderTopTabs(){
+  document.getElementById("top-tabs").innerHTML = GROUPS.map(g => {
+    const cnt = g.id === "all" ? DATA.length : DATA.filter(d => CATS[d.cat] && CATS[d.cat].g === g.id).length;
+    return `<button class="top-tab${topCat===g.id?" active":""}" data-id="${g.id}" onclick="setTop('${g.id}')">${g.label}<span class="tab-count">${cnt}</span></button>`;
+  }).join("");
+}
+function renderSubTabs(){
+  const subs = getSubCats();
+  if(subs.length <= 1){ document.getElementById("sub-tabs").innerHTML = ""; return; }
+  const cnt = c => DATA.filter(d => d.cat === c && matchGroup(d)).length;
+  document.getElementById("sub-tabs").innerHTML =
+    `<button class="sub-tab${subCat==="all_sub"?" active":""}" onclick="setSub('all_sub')">ทั้งหมด</button>` +
+    subs.map(c => `<button class="sub-tab${subCat===c?" active":""}" onclick="setSub('${c}')">${c} <span style="opacity:.55;font-size:10.5px">${cnt(c)}</span></button>`).join("");
+}
+function renderContent(){
+  const f = getFiltered();
+  document.getElementById("stat-text").innerHTML = `แสดง <b>${f.length}</b> มาตรา`;
+  const area = document.getElementById("cards-area");
+  if(!f.length){
+    area.className = "";
+    area.innerHTML = `<div class="empty"><i class="ti ti-mood-empty"></i><p>ไม่พบมาตราที่ค้นหา</p></div>`;
+    return;
+  }
+  if(view === "card"){
+    area.className = "cards-grid";
+    area.innerHTML = f.map((d,i) => `
+      <div class="card" id="c${i}" onclick="toggle('c',${i})">
+        <div class="card-top-bar ${barCls(d.cat)}"></div>
+        <div class="card-body">
+          <div class="card-header">
+            <span class="matra">${d.m}</span>
+            <span class="cat-pill ${pillCls(d.cat)}">${d.cat}</span>
+          </div>
+          <div class="card-name">${d.name}</div>
+          <div class="sep"></div>
+          <div class="short-lbl">สรุปย่อ</div>
+          <div class="card-short">${d.short}</div>
+          <div class="card-full">${d.full}</div>
+          <div class="card-footer">
+            <span class="expand-hint expand-hint-open"><i class="ti ti-chevron-down" style="font-size:11px"></i>&nbsp;ดูตัวบทเต็ม</span>
+            <span class="expand-hint expand-hint-close"><i class="ti ti-chevron-up" style="font-size:11px"></i>&nbsp;ย่อกลับ</span>
+          </div>
+        </div>
+      </div>`).join("");
+  } else {
+    area.className = "";
+    area.innerHTML = f.map((d,i) => `
+      <div class="list-item" id="l${i}" onclick="toggle('l',${i})">
+        <div class="list-inner">
+          <div class="list-bar ${listBarCls(d.cat)}"></div>
+          <div class="list-body">
+            <div class="list-top">
+              <span class="list-matra">${d.m}</span>
+              <span class="cat-pill ${pillCls(d.cat)}">${d.cat}</span>
+            </div>
+            <div class="list-name">${d.name}</div>
+            <div class="list-short">${d.short}</div>
+            <div class="list-full">${d.full}</div>
+          </div>
+        </div>
+      </div>`).join("");
+  }
+}
+function render(){ renderTopTabs(); renderSubTabs(); renderContent(); }
+function setTop(id){ topCat = id; subCat = "all_sub"; render(); }
+function setSub(c){ subCat = c; render(); }
+function setView(v){
+  view = v;
+  document.getElementById("btn-card").className = "vbtn" + (v==="card" ? " active" : "");
+  document.getElementById("btn-list").className = "vbtn" + (v==="list" ? " active" : "");
+  renderContent();
+}
+function onSearch(val){ q = val; renderContent(); }
+render();
+</script>
+</body>
+</html>
