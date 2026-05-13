@@ -460,7 +460,89 @@ body {
   .top-tab { font-size: 12px; padding: 6px 12px; }
   .cards-grid { grid-template-columns: 1fr; }
 }
+
+/* ── Highlight system ─────────────────── */
+mark.hl {
+  border-radius: 3px;
+  padding: 1px 0;
+  cursor: pointer;
+  transition: filter .15s;
+  position: relative;
+}
+mark.hl:hover { filter: brightness(.88); }
+mark.hl[data-color="yellow"]  { background: #fef08a; color: inherit; }
+mark.hl[data-color="green"]   { background: #bbf7d0; color: inherit; }
+mark.hl[data-color="blue"]    { background: #bae6fd; color: inherit; }
+mark.hl[data-color="pink"]    { background: #fbcfe8; color: inherit; }
+mark.hl[data-color="orange"]  { background: #fed7aa; color: inherit; }
+
+/* Floating toolbar */
+#hl-toolbar {
+  position: fixed;
+  z-index: 9999;
+  display: none;
+  align-items: center;
+  gap: 4px;
+  background: #1c1917;
+  border-radius: 10px;
+  padding: 6px 8px;
+  box-shadow: 0 8px 32px rgba(0,0,0,.28), 0 2px 8px rgba(0,0,0,.18);
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+#hl-toolbar::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 6px solid transparent;
+  border-bottom: none;
+  border-top-color: #1c1917;
+}
+.hl-swatch {
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,.25);
+  cursor: pointer;
+  transition: transform .15s, border-color .15s;
+  flex-shrink: 0;
+}
+.hl-swatch:hover { transform: scale(1.25); border-color: #fff; }
+.hl-swatch[data-color="yellow"] { background: #fef08a; }
+.hl-swatch[data-color="green"]  { background: #bbf7d0; }
+.hl-swatch[data-color="blue"]   { background: #bae6fd; }
+.hl-swatch[data-color="pink"]   { background: #fbcfe8; }
+.hl-swatch[data-color="orange"] { background: #fed7aa; }
+.hl-divider { width: 1px; height: 16px; background: rgba(255,255,255,.2); margin: 0 2px; }
+.hl-erase {
+  background: none; border: none;
+  color: rgba(255,255,255,.6);
+  cursor: pointer; font-size: 13px;
+  padding: 2px 4px; border-radius: 5px;
+  transition: color .15s, background .15s;
+  display: flex; align-items: center;
+}
+.hl-erase:hover { color: #fff; background: rgba(255,255,255,.12); }
+
+/* Clear-all badge */
+#hl-clear-all {
+  display: none;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--ink4);
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: var(--transition);
+}
+#hl-clear-all:hover { color: #dc2626; border-color: #fca5a5; }
+#hl-clear-all i { font-size: 12px; }
 </style>
+
 </head>
 <body>
 <div class="page">
@@ -495,6 +577,20 @@ body {
   <!-- Toolbar -->
   <div class="toolbar">
     <div class="stat-text" id="stat-text"></div>
+    <button id="hl-clear-all" onclick="clearAllHighlights()">
+      <i class="ti ti-eraser"></i> ลบไฮไลต์ทั้งหมด
+    </button>
+  </div>
+
+  <!-- Floating highlight toolbar -->
+  <div id="hl-toolbar">
+    <button class="hl-swatch" data-color="yellow" title="เหลือง" onclick="applyHighlight('yellow')"></button>
+    <button class="hl-swatch" data-color="green"  title="เขียว"  onclick="applyHighlight('green')"></button>
+    <button class="hl-swatch" data-color="blue"   title="ฟ้า"    onclick="applyHighlight('blue')"></button>
+    <button class="hl-swatch" data-color="pink"   title="ชมพู"   onclick="applyHighlight('pink')"></button>
+    <button class="hl-swatch" data-color="orange" title="ส้ม"    onclick="applyHighlight('orange')"></button>
+    <div class="hl-divider"></div>
+    <button class="hl-erase" title="ลบไฮไลต์" onclick="eraseHighlight()"><i class="ti ti-eraser"></i></button>
   </div>
 
   <!-- Content -->
@@ -827,7 +923,7 @@ function renderContent(){
       </div>`).join("");
   }
 }
-function render(){ renderTopTabs(); renderSubTabs(); renderContent(); }
+function render(){ renderTopTabs(); renderSubTabs(); renderContent(); if(typeof restoreAllHighlights==="function") restoreAllHighlights(); }
 function setTop(id){ topCat = id; subCat = "all_sub"; render(); }
 function setSub(c){ subCat = c; render(); }
 function setView(v){
@@ -835,9 +931,278 @@ function setView(v){
   document.getElementById("btn-card").className = "vbtn" + (v==="card" ? " active" : "");
   document.getElementById("btn-list").className = "vbtn" + (v==="list" ? " active" : "");
   renderContent();
+  if(typeof restoreAllHighlights==="function") restoreAllHighlights();
 }
-function onSearch(val){ q = val; renderContent(); }
-render();
+function onSearch(val){ q = val; renderContent(); if(typeof restoreAllHighlights==="function") restoreAllHighlights(); }
+// ── Highlight system (persistent via window.storage) ──────────
+
+const HL_STORAGE_KEY = "hl-data";
+
+// In-memory store: { id → { id, matra, field, charStart, charEnd, color, text } }
+// field: "short" | "full"
+let hlMap = {};     // loaded from storage
+let pendingSel = null;
+let activeMarkEl = null;
+const toolbar = document.getElementById("hl-toolbar");
+
+// ── Storage helpers ──────────────────────────────────────────
+
+async function persistHL() {
+  try {
+    await window.storage.set(HL_STORAGE_KEY, JSON.stringify(hlMap));
+  } catch(e) { console.warn("storage.set failed", e); }
+}
+
+async function loadHLFromStorage() {
+  try {
+    const res = await window.storage.get(HL_STORAGE_KEY);
+    hlMap = res ? JSON.parse(res.value) : {};
+  } catch { hlMap = {}; }
+}
+
+// ── Character-offset helpers (text-only, ignores mark tags) ───
+
+function getTextContent(el) {
+  // Plain text ignoring <mark> boundaries (so offsets survive re-render)
+  return el ? el.textContent : "";
+}
+
+function getCharOffset(container, targetNode, offsetInNode) {
+  // Walk text nodes inside container, sum lengths until we reach targetNode
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+  let total = 0, node;
+  while ((node = walker.nextNode())) {
+    if (node === targetNode) return total + offsetInNode;
+    total += node.length;
+  }
+  return total;
+}
+
+function applyMarkAtCharRange(container, charStart, charEnd, hlid, color) {
+  // Walk text nodes and wrap the exact character range
+  const walker = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+  let pos = 0, node;
+  const segments = []; // { node, from, to } to wrap
+
+  while ((node = walker.nextNode())) {
+    const len = node.length;
+    const nodeEnd = pos + len;
+    if (nodeEnd <= charStart) { pos = nodeEnd; continue; }
+    if (pos >= charEnd) break;
+    segments.push({ node, from: Math.max(0, charStart - pos), to: Math.min(len, charEnd - pos) });
+    pos = nodeEnd;
+  }
+
+  segments.reverse().forEach(({ node, from, to }) => {
+    try {
+      const range = document.createRange();
+      range.setStart(node, from);
+      range.setEnd(node, to);
+      const mark = document.createElement("mark");
+      mark.className = "hl";
+      mark.dataset.color = color;
+      mark.dataset.hlid = hlid;
+      range.surroundContents(mark);
+      mark.addEventListener("click", e => { e.stopPropagation(); showEraseForMark(mark, e); });
+    } catch {}
+  });
+}
+
+// ── Find which card element & field a node belongs to ────────
+
+function findContext(node) {
+  let el = node.nodeType === 3 ? node.parentElement : node;
+  while (el && el !== document.body) {
+    const cls = el.classList;
+    if (cls && (cls.contains("card-full") || cls.contains("list-full")
+             || cls.contains("card-short") || cls.contains("list-short"))) {
+      const field = (cls.contains("card-full") || cls.contains("list-full")) ? "full" : "short";
+      // Find card id
+      let p = el.parentElement;
+      while (p && p !== document.body) {
+        if (p.id && (p.id.startsWith("c") || p.id.startsWith("l"))) {
+          // Get matra from DATA by index
+          const idx = parseInt(p.id.slice(1));
+          const matra = DATA[idx] ? DATA[idx].m : p.id;
+          return { container: el, field, cardId: p.id, matra, dataIdx: idx };
+        }
+        p = p.parentElement;
+      }
+    }
+    el = el.parentElement;
+  }
+  return null;
+}
+
+// ── Restore highlights on a specific card element ────────────
+
+function restoreHighlightsForCard(cardEl, prefix) {
+  const idx = parseInt(cardEl.id.slice(prefix.length));
+  const matra = DATA[idx] ? DATA[idx].m : "";
+  Object.values(hlMap).forEach(h => {
+    if (h.matra !== matra) return;
+    const cls = h.field === "full"
+      ? (prefix === "c" ? ".card-full" : ".list-full")
+      : (prefix === "c" ? ".card-short" : ".list-short");
+    const container = cardEl.querySelector(cls);
+    if (!container) return;
+    applyMarkAtCharRange(container, h.charStart, h.charEnd, h.id, h.color);
+  });
+}
+
+// Called after render() to restore all visible highlights
+function restoreAllHighlights() {
+  document.querySelectorAll("[id^='c']").forEach(el => {
+    if (/^c\d+$/.test(el.id)) restoreHighlightsForCard(el, "c");
+  });
+  document.querySelectorAll("[id^='l']").forEach(el => {
+    if (/^l\d+$/.test(el.id)) restoreHighlightsForCard(el, "l");
+  });
+  updateClearBtn();
+}
+
+// ── Toolbar position ─────────────────────────────────────────
+
+function positionToolbarAtRect(rect) {
+  const scrollY = window.scrollY || document.documentElement.scrollTop;
+  toolbar.style.display = "flex";
+  // Force reflow to get real height
+  const th = toolbar.getBoundingClientRect().height || 44;
+  toolbar.style.left = (rect.left + rect.width / 2) + "px";
+  toolbar.style.top  = (rect.top + scrollY - th - 12) + "px";
+}
+
+function hideToolbar() {
+  toolbar.style.display = "none";
+  pendingSel = null;
+  activeMarkEl = null;
+}
+
+// ── Selection events ─────────────────────────────────────────
+
+document.addEventListener("mouseup",  onSelectionEnd);
+document.addEventListener("touchend", e => setTimeout(() => onSelectionEnd(e), 80));
+document.addEventListener("mousedown", e => {
+  if (!toolbar.contains(e.target) && !e.target.closest("mark.hl")) hideToolbar();
+});
+
+function onSelectionEnd(e) {
+  if (toolbar.contains(e.target)) return;
+  const sel = window.getSelection();
+  if (!sel || sel.isCollapsed || !sel.toString().trim()) return;
+
+  const ctx = findContext(sel.anchorNode);
+  if (!ctx) { hideToolbar(); return; }
+
+  pendingSel = { range: sel.getRangeAt(0).cloneRange(), ctx };
+  activeMarkEl = null;
+  const rect = sel.getRangeAt(0).getBoundingClientRect();
+  positionToolbarAtRect(rect);
+}
+
+// ── Apply highlight ───────────────────────────────────────────
+
+function applyHighlight(color) {
+  if (!pendingSel) {
+    // Clicked swatch while a mark is active → change color
+    if (activeMarkEl) changeMarkColor(color);
+    return;
+  }
+  const { range, ctx } = pendingSel;
+  if (range.collapsed) return;
+
+  const charStart = getCharOffset(ctx.container, range.startContainer, range.startOffset);
+  const charEnd   = getCharOffset(ctx.container, range.endContainer,   range.endOffset);
+  if (charStart >= charEnd) return;
+
+  const hlid = Date.now() + "_" + Math.random().toString(36).slice(2,7);
+  const hlEntry = {
+    id: hlid, matra: ctx.matra, field: ctx.field,
+    charStart, charEnd, color,
+    text: range.toString().slice(0, 120),
+  };
+
+  applyMarkAtCharRange(ctx.container, charStart, charEnd, hlid, color);
+
+  hlMap[hlid] = hlEntry;
+  persistHL();
+  updateClearBtn();
+  window.getSelection().removeAllRanges();
+  hideToolbar();
+}
+
+// ── Click on existing mark ────────────────────────────────────
+
+function showEraseForMark(mark, e) {
+  pendingSel = null;
+  activeMarkEl = mark;
+  const rect = mark.getBoundingClientRect();
+  positionToolbarAtRect(rect);
+}
+
+function eraseHighlight() {
+  if (!activeMarkEl) return;
+  const id = activeMarkEl.dataset.hlid;
+  removeMarkById(id);
+  delete hlMap[id];
+  persistHL();
+  updateClearBtn();
+  hideToolbar();
+}
+
+function changeMarkColor(color) {
+  if (!activeMarkEl) return;
+  const id = activeMarkEl.dataset.hlid;
+  document.querySelectorAll(`mark.hl[data-hlid="${id}"]`).forEach(m => m.dataset.color = color);
+  if (hlMap[id]) hlMap[id].color = color;
+  persistHL();
+  hideToolbar();
+}
+
+function removeMarkById(id) {
+  document.querySelectorAll(`mark.hl[data-hlid="${id}"]`).forEach(m => {
+    const p = m.parentNode;
+    while (m.firstChild) p.insertBefore(m.firstChild, m);
+    p.removeChild(m);
+    p.normalize();
+  });
+}
+
+// ── Swatch clicks (dual purpose: apply or change color) ───────
+
+document.querySelectorAll(".hl-swatch").forEach(btn => {
+  btn.addEventListener("click", () => applyHighlight(btn.dataset.color));
+});
+
+// ── Clear all ────────────────────────────────────────────────
+
+function clearAllHighlights() {
+  if (!confirm("ลบไฮไลต์ทั้งหมด?")) return;
+  document.querySelectorAll("mark.hl").forEach(m => {
+    const p = m.parentNode;
+    while (m.firstChild) p.insertBefore(m.firstChild, m);
+    p.removeChild(m);
+    p.normalize();
+  });
+  hlMap = {};
+  persistHL();
+  updateClearBtn();
+  hideToolbar();
+}
+
+function updateClearBtn() {
+  const btn = document.getElementById("hl-clear-all");
+  const count = Object.keys(hlMap).length;
+  btn.style.display = count ? "flex" : "none";
+  if (count) btn.innerHTML = `<i class="ti ti-eraser"></i> ลบไฮไลต์ทั้งหมด (${count})`;
+}
+
+// ── Boot: load from storage, then render ─────────────────────
+
+loadHLFromStorage().then(() => {
+  render();
+  restoreAllHighlights();
+});
 </script>
 </body>
 </html>
